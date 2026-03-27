@@ -1,57 +1,36 @@
-# Video-With-AI
-
-Create and enhance videos using AI-powered workflows.
-
-## Overview
-
-`Video-With-AI` is a project focused on helping users generate, edit, and improve video content with artificial intelligence. It can be used as a base for building features like script generation, scene planning, voiceovers, subtitles, and automated editing pipelines.
-
-## Features
-
-- AI-assisted video idea and script generation
-- Automated subtitle/caption support
-- Voiceover and narration workflow support
-- Scene and content planning with AI prompts
-- Extensible structure for future integrations
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
 
-1. Clone the repository:
-   ```bash
-   git clone <your-repo-url>
-   cd Video-With-AI
-   ```
-2. Install dependencies (when available):
-   ```bash
-   # Example
-   npm install
-   ```
-3. Run the project:
-   ```bash
-   # Example
-   npm run dev
-   ```
+First, run the development server:
 
-## Project Structure
+```bash
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
+```
 
-You can organize modules like:
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-- `src/` - Application source code
-- `assets/` - Media files and static assets
-- `scripts/` - Utility and automation scripts
-- `docs/` - Additional documentation
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-## Use Cases
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-- AI-generated short-form video content
-- Social media video automation
-- Educational video production with AI assistance
-- Rapid prototyping for AI video tools
+## Learn More
 
-## Contributing
+To learn more about Next.js, take a look at the following resources:
 
-Contributions are welcome. Feel free to open issues and pull requests for improvements.
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-## License
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-Add your preferred license here (for example, MIT).
+## Deploy on Vercel
+
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
