@@ -1,36 +1,104 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# video-with-ai
 
-## Getting Started
+A **Next.js (App Router)** app for working with video content, extended from the default `create-next-app` template with **authentication**, **MongoDB**, and **data models** you can build on.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## What was added after creating the project
+
+| Area | What it does |
+|------|----------------|
+| **MongoDB + Mongoose** | `lib/db.ts` connects once and reuses the connection in dev (cached on `global`). |
+| **User model** | `models/User.ts` — email + password; password is **hashed with bcrypt** before save. |
+| **Video model** | `models/Video.ts` — title, description, URLs, optional transformation defaults (e.g. dimensions). |
+| **NextAuth** | `lib/auth.ts` + `app/api/auth/[...nextauth]/route.ts` — session handling for the app. |
+| **Sign-in** | **Credentials** provider (email/password against the database). GitHub/Google are in the file but commented out. |
+| **Sessions** | **JWT** strategy, 30-day lifetime; `session.user.id` is set via callbacks. |
+| **Custom auth pages** | Config points **sign-in** and **errors** to `/login` (add that route when you build the UI). |
+| **Registration API** | `POST` `app/api/auth/register/route.ts` — intended for creating accounts (email + password). |
+| **TypeScript** | `next-auth.d.ts` extends the session type with `user.id`. `types.d.ts` types the global Mongoose cache used by `lib/db.ts`. |
+| **Imports** | `@/` maps to the project root (see `tsconfig.json` → `paths`). |
+
+---
+
+## Tech stack
+
+- **Next.js** 16 · **React** 19 · **TypeScript**
+- **Tailwind CSS** v4 (PostCSS)
+- **MongoDB** via **Mongoose**
+- **NextAuth.js** v4 · **bcryptjs**
+
+---
+
+## Project layout (main pieces)
+
+```
+app/
+  api/auth/
+    [...nextauth]/route.ts   ← NextAuth HTTP handler (GET/POST)
+    register/route.ts       ← Register user (POST)
+  page.tsx, layout.tsx, …
+lib/
+  auth.ts                   ← NextAuth options (providers, callbacks, session)
+  db.ts                     ← MongoDB connection helper
+models/
+  User.ts
+  Video.ts
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Environment variables
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Create a **`.env`** in the project root (do not commit secrets). Typical values:
 
-## Learn More
+| Variable | Purpose |
+|----------|---------|
+| `MONGODB_URL` | MongoDB connection string (required for DB + credentials login). |
+| `NEXTAUTH_SECRET` | Secret used to sign JWT/session data (set a long random string in production). |
+| `NEXTAUTH_URL` | App URL (e.g. `http://localhost:3000` in dev) — use for OAuth/callbacks when you enable providers. |
 
-To learn more about Next.js, take a look at the following resources:
+Optional (only if you uncomment OAuth in `lib/auth.ts`):
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- `GITHUB_ID`, `GITHUB_SECRET`
+- `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## How authentication works (short)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+1. **Sign-in:** User sends email/password to NextAuth’s credentials flow.
+2. **Authorize:** Server connects to MongoDB, finds the user, compares password with **bcrypt**.
+3. **Session:** On success, a **JWT** is issued; callbacks attach **`user.id`** to the token and session.
+4. **NextAuth route:** `app/api/auth/[...nextauth]/route.ts` exports GET/POST so all `/api/auth/*` NextAuth endpoints work. The folder name must be **`[...nextauth]`** (catch-all segment), not a literal `...` folder name.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+## Database connection (revision notes)
+
+- `connectToDatabase()` reads `MONGODB_URL` and avoids opening a new connection on every request by caching on `global.mongoose` (important for serverless/hot reload).
+
+---
+
+## Scripts
+
+```bash
+npm install    # install dependencies
+npm run dev    # dev server → http://localhost:3000
+npm run build  # production build
+npm run start  # run production server after build
+npm run lint   # ESLint
+```
+
+---
+
+## Deploy
+
+Same idea as any Next.js app: set env vars on the host (especially `MONGODB_URL`, `NEXTAUTH_SECRET`, `NEXTAUTH_URL`), run `npm run build`, then `npm run start` (or use a platform like Vercel that runs the build for you).
+
+---
+
+## Learn more (Next.js)
+
+- [Next.js Documentation](https://nextjs.org/docs)
+- [NextAuth.js](https://next-auth.js.org/)
