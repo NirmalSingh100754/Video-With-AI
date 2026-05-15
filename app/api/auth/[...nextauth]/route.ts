@@ -1,5 +1,19 @@
-import NextAuth from "next-auth";
-import { authOptions } from "@/lib/auth";
-const handler = NextAuth(authOptions);
+import { getUploadAuthParams } from "@imagekit/next/server";
 
-export { handler as GET, handler as POST };
+export async function GET() {
+try {
+  const authenticationParameters = getUploadAuthParams({
+    privateKey: process.env.IMAGEKIT_PRIVATE_KEY as string,
+    publicKey: process.env.NEXT_PUBLIC_KEY as string,
+
+  });
+
+  return Response.json({
+    authenticationParameters,
+    publicKey: process.env.NEXT_PUBLIC_KEY,
+  });
+} catch (error) {
+  console.log(error);
+  return Response.json({ error }, { status: 500 });
+}
+}   
