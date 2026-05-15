@@ -13,7 +13,6 @@ try {
     publicKey: process.env.NEXT_PUBLIC_KEY,
   });
 } catch (error) {
-  console.log(error);
-  return Response.json({ error }, { status: 500 });
+  return Response.json({ error: "Authentication for ImageKit Failed" }, { status: 500 });
 }
 }   
