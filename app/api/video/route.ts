@@ -2,7 +2,6 @@ import { authOptions } from "@/lib/auth";
 import { connectToDatabase } from "@/lib/db";
 import Video, { Ivideo } from "@/models/Video";
 import { getServerSession } from "next-auth";
-import { New_Amsterdam } from "next/font/google";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET() {
