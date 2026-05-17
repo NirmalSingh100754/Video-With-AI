@@ -52,7 +52,7 @@ function RegisterPage() {
           value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
         />
-        <button type="submit">Register</button>
+        <button type="submit" className="cursor-pointer">Register</button>
       </form>
       <div className="">
         <p>
